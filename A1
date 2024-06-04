@@ -1,1 +1,26 @@
+def Menu():
+    option = str(input("1.Create a new quiz game\n2.Display existing game\n3.Play a quiz game"))
 
+    match option:
+        case "1":
+            Create()
+        case "2":
+            Display()
+        case "3":
+            Play()
+        case _:
+            print("Invalid option")
+            Menu()
+
+def Create():
+    print("creat")
+def Display():
+    print("display")
+def Play():
+    print("play")
+
+def main():
+    print("Welcome to the quiz game!")
+    Menu()
+if __name__ == "__main__":
+    main()
