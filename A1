@@ -26,7 +26,7 @@ def Create():
   
     filename = str(gamename) + ".txt"
     Checkfile()
-    if ifexists = False:
+    if ifexists == False:
         Askquestion()
     else:
         print("This game has already been created")
