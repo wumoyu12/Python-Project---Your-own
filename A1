@@ -49,7 +49,16 @@ def CreatQA():
         answer = str(input("Enter the answer"))
         answerlist.append(answer)
         count = count - 1
-  
+
+    for i in range(0, len(questionlist)):
+      pythfile = open(filename, "a")
+      input = questionlist[i]
+      output = answerlist[i]
+      pythfile.write(input)
+      pythfile.write(output)
+      
+    pythfile.close()
+
 def Checkhowmany():
     numlen = len(howmany)
     if numlen < 0:
