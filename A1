@@ -1,3 +1,6 @@
+import os.path
+from os import path
+
 def Menu():
     option = str(input("1.Create a new quiz game\n2.Display existing game\n3.Play a quiz game"))
 
@@ -13,7 +16,73 @@ def Menu():
             Menu()
 
 def Create():
-    print("creat")
+    global filename
+    print("Introduction")
+    gamename = str(input("Please enter the name of the game(Only letters)"))
+    gamename = gamename.upper
+    ifcorrect = Checkname(gamename)
+    if ifcorrect == "false":
+        Create()
+  
+    filename = str(gamename) + ".txt"
+    Checkfile()
+    if ifexists = False:
+        Askquestion()
+    else:
+        print("This game has already been created")
+        Menu()
+
+def AskCQ():
+    global howmany, count
+    howmany = str(input("How many questions do you want to add?"))
+    Checkhowmany()
+    count = int(howmany)
+
+    CreatQA()
+  
+def CreatQA():
+    questionlist = []
+    answerlist = []
+    while count != 0:
+        question = str(input("Enter the question"))
+        questionlist.append(question)
+        answer = str(input("Enter the answer"))
+        answerlist.append(answer)
+        count = count - 1
+  
+def Checkhowmany():
+    numlen = len(howmany)
+    if numlen < 0:
+        print("Invalid number")
+        AskCQ()
+    else:
+      numlist = list(howmany)
+      for i in range(0, numlen):
+        newnum = ord(numlist[i])
+        if newnum < 49 or newnum > 57:
+          print("Invalid number")
+          AskCQ()
+
+def Checkfile():
+    global ifexists
+    ifexists = bool(path.exists(filename))
+
+def Checkname(name):
+    namelen = len(name)
+    if namelen < 0:
+      print("Invalid")
+      ifcorrect = "false"
+      return ifcorrect
+    else:
+      namelist = list(name)
+      for i in range(0, namelen):
+        newname = ord(namelist[i])
+        if newname < 65 or newname > 90:
+          print("Invalid")
+          ifcorrect = "false"
+          return ifcorrect
+      
+
 def Display():
     print("display")
 def Play():
