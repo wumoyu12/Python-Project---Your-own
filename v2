@@ -1,0 +1,171 @@
+'''
+Name: Shiqi Wu, Moyu Wu
+Start Date: 6/4/24
+End Date: 6/10/24
+Description: This program allows the user to create quiz games. They are able to view and play the games.
+'''
+##v2
+
+import os.path
+from os import path
+
+def main():
+    Menu(); 
+    
+def Menu():
+    message = "Welcome to the Quiz Game! You can create your own Quiz Game and play it. Let's get started!"
+    menu = "Menu\n-----------------\n1. Create a new quiz game\n2. View existing game\n3. Play a quiz game\n-----------------";
+    print(message + "\n" + menu);
+    WhichOption();
+
+def WhichOption():
+    option = str(input("Please choose from the menu: "));
+    match option:
+        case "1":
+            Create();
+        case "2":
+            View();
+        case "3":
+            Play();
+        case _:
+            print("Invalid input, please enter only 1, 2, or 3");
+            WhichOption();
+
+def Create():
+    global pythfile
+    gamename = str(input("Please enter a name for creating your game(Only letters): "));
+    TrueFalse = Checkname(gamename);
+    if (TrueFalse == "false"):
+        print("Invalid input, please enter only letters")
+        Create();  
+    else:
+        exists = CheckExists(gamename);
+        if (exists == False):
+            CreateGameFile();
+        else:
+            print("This game has been created already, please re-enter a name for your game")
+            Create()
+        
+def CreateGameFile():
+    pythfile = open(filename, "w"); 
+    print("New game file created! Let's start creating your game!"); 
+    pythfile.close(); 
+    NumQuestions();
+    
+def Checkname(name):
+    namelen = len(name);
+    if (namelen == 0):
+        ifcorrect = "false";
+        return ifcorrect
+    else:
+        namelist = list(name)
+        for i in range(0, namelen):
+            newname = ord(namelist[i])
+            if (newname >= 65 and newname <= 90) or (newname >= 97 and newname <= 122):
+                ifcorrect = "true";
+            else:
+                ifcorrect = "false"
+                return ifcorrect;
+        return ifcorrect;
+
+def CheckExists(name):
+    global filename;
+    filename = name + ".txt";
+    ifexists = bool(path.exists(filename));
+    return ifexists;
+        
+def NumQuestions():
+    howmany = str(input("How many questions would you like to ask? "))
+    TrueFalse = Checkhowmany(howmany)
+    if(TrueFalse == "false"):
+        print("Invalid input, please enter an integer above 0");
+        NumQuestions();
+    else:
+        CreatQuiz(int(howmany));
+    
+def Checkhowmany(num):
+    numlen = len(num)
+    if (numlen == 0 or num == "0"):
+        ifcorrect = "false";
+    else:
+        numlist = list(num)
+        for i in range(0, numlen):
+            newnum = ord(numlist[i])
+            if (newnum > 47 and newnum < 58):
+                ifcorrect = "true";
+            else:
+                ifcorrect = "false"
+                return ifcorrect
+    return ifcorrect
+    
+def CreatQuiz(count):
+    Qarray = [];
+    Aarray = [];
+    while (count > 0):
+        question = str(input("Enter the question: "));
+        Qarray.append(question);
+        answer = str(input("Enter the answer: "));
+        Aarray.append(answer);
+        count = count - 1;
+
+    for i in range(0, len(Qarray)):
+        pythfile = open(filename, "a");
+        newwork = Qarray[i];
+        newwork2 = Aarray[i];
+        pythfile.write("Question: " + newwork + "\n");
+        pythfile.write("Answer: " + newwork2 + "\n");
+    
+    pythfile = open(filename, "r");
+    print("Finished creating game! Here is your game: " + "\n" + pythfile.read() + "\n-----------------");
+    pythfile.close();
+    print("You will be guided to the beginning");
+    main();
+
+def View():
+    gamename = str(input("Please enter the name of the game for viewing: "));
+    TrueFalse = Checkname(gamename);
+    if (TrueFalse == "false"):
+        print("Invalid input, please enter only letters")
+        View();
+    else:
+        exists = CheckExists(gamename);
+        if(exists == False):
+            message = "v"
+            Which(message);
+        else:
+            pythfile = open(filename, "r");
+            pythfile.read();
+            pythfile.close();
+        
+def Which(msg):
+    print("The game does not exist, would you like to\n1. re-enter the name of the game\n2. create this game");
+    whichone = str(input("Please enter 1 or 2:"));
+    match whichone:
+        case "1":
+            if(msg == "v"):
+                View();
+            else:
+                Play();
+        case "2":
+            CreateGameFile();
+        case _:
+            print("Invalid input, please try again");
+            Which(msg);            
+               
+def Play():
+    gamename = str(input("Please enter the name of the game for playing: "));
+    TrueFalse = Checkname(gamename);
+    if (TrueFalse == "false"):
+        print("Invalid input, please enter only letters")
+        Play();  
+    else:
+        exists = CheckExists(gamename);
+        if(exists == False):
+            message = "p"
+            Which(message);
+        else:
+            print("Play Game");
+
+if __name__ == "__main__":
+    main();
+    
