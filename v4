@@ -1,0 +1,197 @@
+'''
+Name: Shiqi Wu, Moyu Wu
+Start Date: 6/4/24
+End Date: 6/7/24
+Description: This program allows the user to create quiz games. They are able to view and play the games.
+'''
+
+import os.path
+from os import path
+
+def main():
+    Menu(); 
+    
+def Menu():
+    message = "Welcome to the Quiz Game! You can create your own Quiz Game and play it. Let's get started!"
+    menu = "Menu\n-----------------\n1. Create a new quiz game\n2. View existing game\n3. Play a quiz game\n-----------------";
+    print(message + "\n" + menu);
+    WhichOption();
+
+def WhichOption():
+    option = str(input("Please choose from the menu: "));
+    match option:
+        case "1":
+            Create();
+        case "2":
+            View();
+        case "3":
+            Play();
+        case _:
+            print("Invalid input, please enter only 1, 2, or 3");
+            WhichOption();
+
+def Create():
+    global pythfile
+    gamename = str(input("Please enter a name for creating your game(Letters only): "));
+    TrueFalse = Checkname(gamename);
+    if (TrueFalse == "false"):
+        print("Invalid input, please enter only letters")
+        Create();  
+    else:
+        exists = CheckExists(gamename);
+        if (exists == False):
+            CreateGameFile();
+        else:
+            print("This game has been created already, please re-enter a name for your game")
+            Create();
+    
+def Checkname(name):
+    length = len(name);
+    if (length == 0):
+        ifcorrect = "false";
+        return ifcorrect
+    else:
+        eachletter = []
+        eachletter.extend(name)
+        for i in range(0,length):
+            newname = ord(eachletter[i]);
+            if (newname >= 65 and newname <= 90) or (newname >= 97 and newname <= 122):
+                ifcorrect = "true";
+            else:
+                ifcorrect = "false"
+                return ifcorrect;
+        return ifcorrect;
+    
+def CreateGameFile():
+    pythfile = open(filename, "w"); 
+    print("New game file created! Let's start creating your game!"); 
+    pythfile.close(); 
+    NumQuestions();
+    
+def CheckExists(name):
+    global filename;
+    filename = name + ".txt";
+    ifexists = bool(path.exists(filename));
+    return ifexists;
+        
+def NumQuestions():
+    howmany = str(input("How many questions would you like to ask? "))
+    TrueFalse = Checkhowmany(howmany)
+    if(TrueFalse == "false"):
+        print("Invalid input, please enter an integer above 0");
+        NumQuestions();
+    else:
+        CreatQuiz(int(howmany));
+    
+def Checkhowmany(num):
+    length = len(num)
+    if (length == 0 or num == "0"):
+        ifcorrect = "false";
+    else:
+        eachnum = []
+        eachnum.extend(num)
+        for i in range(0, length):
+            newnum = ord(eachnum[i])
+            if (newnum >= 48 and newnum <= 57):
+                ifcorrect = "true";
+            else:
+                ifcorrect = "false"
+                return ifcorrect
+    return ifcorrect
+    
+def CreatQuiz(count):
+    Qarray = [];
+    Aarray = [];
+    while (count > 0):
+        question = str(input("Enter the question: "));
+        Qarray.append(question);
+        answer = str(input("Enter the answer: "));
+        Aarray.append(answer);
+        count = count - 1;
+
+    for i in range(0, len(Qarray)):
+        pythfile = open(filename, "a");
+        newwork = Qarray[i];
+        newwork2 = Aarray[i];
+        pythfile.write("Question: " + newwork + "\n");
+        pythfile.write("Answer: " + newwork2 + "\n");
+    
+    pythfile = open(filename, "r");
+    print("Finished creating game! Here is your game: " + "\n" + pythfile.read() + "\n-----------------");
+    pythfile.close();
+    print("You will be guided to the beginning");
+    main();
+
+def View():
+    gamename = str(input("Please enter the name of the game for viewing: "));
+    TrueFalse = Checkname(gamename);
+    if (TrueFalse == "false"):
+        print("Invalid input, please enter only letters")
+        View();
+    else:
+        exists = CheckExists(gamename);
+        if(exists == False):
+            message = "v"
+            Which(message);
+        else:
+            pythfile = open(filename, "r");
+            print(pythfile.read());
+            pythfile.close();
+            print("You will be guided to the beginning");
+            main();
+        
+def Which(msg):
+    print("The game does not exist, would you like to\n1. re-enter the name of the game\n2. create this game");
+    whichone = str(input("Please enter 1 or 2: "));
+    match whichone:
+        case "1":
+            if(msg == "v"):
+                View();
+            else:
+                Play();
+        case "2":
+            CreateGameFile();
+        case _:
+            print("Invalid input, please try again");
+            Which(msg);            
+               
+def Play():
+    gamename = str(input("Please enter the name of the game for playing: "));
+    TrueFalse = Checkname(gamename);
+    if (TrueFalse == "false"):
+        print("Invalid input, please enter only letters")
+        Play();  
+    else:
+        exists = CheckExists(gamename);
+        if(exists == False):
+            message = "p"
+            Which(message);
+        else:
+            PLayGame();
+
+def PLayGame():
+    Content = [];
+    pythfile = open(filename, "r");
+    Content = pythfile.readlines();
+    length = len(Content);
+    length = length / 2;
+    length = int(length);
+    index = 0;
+    score = 0;
+    for i in range(0,length):    
+        print(Content[index]);  
+        answer = str(input("Enter your answer: "));
+        answer = "Answer: " + answer + "\n";
+        if(answer == Content[index + 1]):
+            print("Congratulations! Your answer is correct!");
+            score = score + 1;
+        else:
+            print("Sorry, your answer is incorrect... Correct " + Content[index + 1]);
+        index = index + 2;
+        
+    print("You got " + str(score) + " out of " + str(length) + ". Good job!");
+    print("Game is Over! You will be guided to the beginning.");    
+    main();
+
+if __name__ == "__main__":
+    main();
