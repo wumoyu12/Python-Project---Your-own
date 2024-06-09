@@ -81,7 +81,7 @@ def NumQuestions():
         print("Invalid input, please enter an integer above 0");
         NumQuestions();
     else:
-        CreatQuiz(int(howmany));
+        CreateQuiz(int(howmany));
     
 def Checkhowmany(num):
     length = len(num)
@@ -99,7 +99,7 @@ def Checkhowmany(num):
                 return ifcorrect
     return ifcorrect
     
-def CreatQuiz(count):
+def CreateQuiz(count):
     Qarray = [];
     Aarray = [];
     while (count > 0):
